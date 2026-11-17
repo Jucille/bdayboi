@@ -7,12 +7,18 @@
     for (var rep = 0; rep < 2; rep++)for (var i = 0; i < n; i++) {
       var k = (i + off) % n, f = document.createElement('div'); f.className = 'fr';
       if (rep) f.setAttribute('aria-hidden', 'true');
-      var b = document.createElement('b'); b.textContent = (20 + i * 3 + off) + ' \u25B8';
+      var b = document.createElement('b'); b.textContent = (20 + (i % 10) * 3 + off) + ' \u25B8';
       var im = document.createElement('img'); im.src = list[k]; im.alt = rep ? '' : 'Photo'; im.draggable = false;
       f.appendChild(b); f.appendChild(im); t.appendChild(f);
     }
   }
-  build('t1', K, 0); build('t2', K2, 0); build('t3', P, 0);
+  build('t1', K, 0); build('t2', K2, 0); 
+  /* two rows share no photo: each row gets 5 different photos, repeated to fill wide screens */
+  function rep(a, n) { var r = []; for (var j = 0; j < n; j++) r = r.concat(a); return r; }
+  var rowA = [0, 2, 4, 6, 8].map(function (i) { return P[i]; });
+  var rowB = [1, 3, 5, 7, 9].map(function (i) { return P[i]; });
+  build('t3', rep(rowA, 4), 0);
+  build('t4', rep(rowB, 4), 0);
   var hero = document.getElementById('hero');
   for (var s = 0; s < 16; s++) { var d = document.createElement('i'); d.className = 'star'; d.style.left = (Math.random() * 96 + 2) + '%'; d.style.top = (Math.random() * 55 + 2) + '%'; d.style.animationDelay = (Math.random() * 3) + 's'; hero.appendChild(d); }
   document.getElementById('parked').innerHTML = document.querySelector('.bike svg').outerHTML;
@@ -41,7 +47,7 @@
   document.getElementById('rev').addEventListener('click', function () {
     if (busy) return; busy = true; revFx(); txt.textContent = 'ブロロロ! Vroom!'; go(100, 1100); setTimeout(function () { goTo('photos'); }, 1500);
     setTimeout(function () { go(22, 1800); }, 1400);
-    setTimeout(function () { txt.textContent = 'Back to 22. Ride safe!'; busy = false; }, 3300);
+    setTimeout(function () { txt.textContent = 'Ride safe!'; busy = false; }, 3300);
   });
   function goTo(id) { var el = document.getElementById(id); if (el && el.offsetParent === null) el = document.getElementById('msg'); if (el) el.scrollIntoView({ behavior: window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }
   Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function (b) { b.addEventListener('click', function () { goTo(b.getAttribute('data-go')); }); });
@@ -139,7 +145,7 @@
       });
     });
   }
-  function unlock() { qi = Q.length; setProg(); document.getElementById('ignite').classList.add('open'); solved = true; start.disabled = false; skip.hidden = true; quiz.innerHTML = ''; gmsg.textContent = 'All correct! Unlocked.'; document.getElementById('gtxt').textContent = 'Nice one. Press start and let the ride deliver it.'; party(); }
+  function unlock() { qi = Q.length; setProg(); document.getElementById('ignite').classList.add('open'); solved = true; start.disabled = false; skip.hidden = true; quiz.innerHTML = ''; gmsg.textContent = 'All correct! Unlocked.'; document.getElementById('gtxt').textContent = 'Nice one. Press start.'; party(); }
   skip.addEventListener('click', unlock);
   renderQ(); setProg();
   start.addEventListener('click', function () { ensureAudio(); play(open); });
