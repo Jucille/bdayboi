@@ -12,7 +12,7 @@
       f.appendChild(b); f.appendChild(im); t.appendChild(f);
     }
   }
-  build('t1', K, 0); build('t2', K2, 0); 
+  build('t1', K, 0); build('t2', K2, 0);
   /* two rows share no photo: each row gets 5 different photos, repeated to fill wide screens */
   function rep(a, n) { var r = []; for (var j = 0; j < n; j++) r = r.concat(a); return r; }
   var rowA = [0, 2, 4, 6, 8].map(function (i) { return P[i]; });
@@ -62,8 +62,8 @@
     setTimeout(fn, 1300);
     setTimeout(function () { ride.classList.remove('on', 'back'); start.disabled = !solved; again.disabled = false; }, 2900);
   }
-  var MS = ['Happy 22nd Birthday Rek, I may not be good in making messages or a sweet message but I wanna let you know how grateful I am that I have you in my life, life may separate us before but  thank you for finding your way back to me and making things right the way they supposed to be.', 'I\'ve seen how much you\'ve grown and I really appreciate the patience and effort you\'ve shown lately. Thank you for always supporting and helping me sa akong mga ka echosan sa kinabuhi. I\'m really happy and grateful ug unsay naa sa atoa karon. Kabaw ko e correct nimo ang akong English pero okay nana oi atleast masabtan ug na deliver ug tarong.', 
-    'I pray for your safety, good health, long life, happiness, success and may this new chapter brings you closer sa mga gusto nimo sa kinabuhi and I hope every decision you do in life, is si God ang imo e center.  Happy Birthday again, <3 ', 'From the woman u love :P, ' , 'Jucille'], ct = [];
+  var MS = ['Happy 22nd Birthday Rek, I may not be good in making messages or a sweet message but I wanna let you know how grateful I am that I have you in my life, life may separate us before but  thank you for finding your way back to me and making things right the way they supposed to be.', 'I\'ve seen how much you\'ve grown and I really appreciate the patience and effort you\'ve shown lately. Thank you for always supporting and helping me sa akong mga ka echosan sa kinabuhi. I\'m really happy and grateful ug unsay naa sa atoa karon. Kabaw ko e correct nimo ang akong English pero okay nana oi atleast masabtan ug na deliver ug tarong.',
+    'I pray for your safety, good health, long life, happiness, success and may this new chapter brings you closer sa mga gusto nimo sa kinabuhi and I hope every decision you do in life, is si God ang imo e center.  Happy Birthday again, <3 ', 'From the woman u love :P, ', 'Jucille'], ct = [];
   function clearChat() { ct.forEach(clearTimeout); ct = []; document.getElementById('cbody').innerHTML = ''; document.getElementById('us').classList.remove('on'); }
   function hearts() { if (calm) return; var c = document.getElementById('chat'); for (var h = 0; h < 9; h++) { var e = document.createElement('i'); e.className = 'heart'; e.textContent = '♥'; e.style.left = (8 + Math.random() * 30) + '%'; e.style.setProperty('--hx', (Math.random() * 90 - 10) + 'px'); e.style.animationDelay = (h * .12) + 's'; c.appendChild(e); setTimeout(function (x) { x.remove(); }, 2800, e); } }
   function runChat() {
@@ -150,4 +150,24 @@
   renderQ(); setProg();
   start.addEventListener('click', function () { ensureAudio(); play(open); });
   again.addEventListener('click', function () { play(closeMsg, true); });
+})();
+
+/* back to top */
+(function () {
+  var b = document.getElementById('totop'), ring = document.getElementById('totopRing');
+  if (!b) return;
+  var C = 131.95, tick = false;
+  function upd() {
+    tick = false;
+    var y = window.pageYOffset || document.documentElement.scrollTop, max = document.documentElement.scrollHeight - window.innerHeight;
+    b.classList.toggle('on', y > 500);
+    if (ring) ring.style.strokeDashoffset = C * (1 - (max > 0 ? Math.min(y / max, 1) : 0));
+  }
+  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
+  window.addEventListener('resize', upd);
+  b.addEventListener('click', function () {
+    var calm = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+    window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
+  });
+  upd();
 })();
